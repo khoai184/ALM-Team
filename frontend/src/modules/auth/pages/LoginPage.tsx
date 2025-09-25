@@ -21,19 +21,20 @@ export default function AuthPage() {
   };
 
   return (
-    <div
-      className="relative w-[1000px] h-[600px] rounded-2xl shadow-2xl overflow-hidden"
-      style={{}}
-    >
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100">
+      <div
+        className="relative w-full max-w-[1000px] h-[600px] rounded-2xl shadow-2xl overflow-hidden"
+        style={{}}
+      >
       {/* LOGIN FORM */}
       <div
-        className={`absolute top-0 left-0 w-1/2 h-full flex items-center justify-center
+        className={`absolute top-0 left-0 w-full md:w-1/2 h-full flex items-center justify-center
           transition-all duration-700 ease-in-out
           ${isSignup ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100 z-10"}
         `}
       >
         {activeForm === "login" && (
-          <form className="w-4/5 space-y-4 bg-white/95 p-8 rounded-xl shadow-lg">
+          <form className="w-4/5 max-w-sm space-y-4 bg-white/95 p-4 md:p-8 rounded-xl shadow-lg">
             <img src={codegymLogoUrl} alt="CodeGym Logo" className="h-10 mb-6" />
 
             <input type="email" placeholder="Email address" className="input-style" />
@@ -56,9 +57,9 @@ export default function AuthPage() {
               Don’t have an account?
             </p>
 
-            <div className="flex items-center justify-center gap-4 mt-4">
-              <button type="button" className="btn-social bg-red-500">Google</button>
-              <button type="button" className="btn-social bg-blue-600">Facebook</button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mt-4">
+              <button type="button" className="btn-social bg-red-500 w-full sm:w-auto">Google</button>
+              <button type="button" className="btn-social bg-blue-600 w-full sm:w-auto">Facebook</button>
             </div>
           </form>
         )}
@@ -66,13 +67,13 @@ export default function AuthPage() {
 
       {/* SIGNUP FORM */}
       <div
-        className={`absolute top-0 right-0 w-1/2 h-full flex items-center justify-center
+        className={`absolute top-0 right-0 w-full md:w-1/2 h-full flex items-center justify-center
           transition-all duration-700 ease-in-out
           ${isSignup ? "translate-x-0 opacity-100 z-10" : "translate-x-full opacity-0"}
         `}
       >
         {activeForm === "signup" && (
-          <form className="w-4/5 space-y-4 bg-white/95 p-8 rounded-xl shadow-lg">
+          <form className="w-4/5 max-w-sm space-y-4 bg-white/95 p-4 md:p-8 rounded-xl shadow-lg">
             <img src={codegymLogoUrl} alt="CodeGym Logo" className="h-10 mb-6" />
 
             <input type="text" placeholder="Username" className="input-style" />
@@ -98,7 +99,7 @@ export default function AuthPage() {
 
       {/* OVERLAY */}
       <div
-        className={`absolute top-0 left-0 w-1/2 h-full z-30
+        className={`absolute top-0 left-0 w-full md:w-1/2 h-full z-30
           bg-indigo-700/90 text-white
           flex flex-col items-center justify-center
           transition-transform duration-700 ease-in-out
@@ -109,13 +110,13 @@ export default function AuthPage() {
         <img src="/path/to/tim.png" alt="TIM Logo" className="h-8 mb-6" />
 
         <div
-          className={`transition-opacity duration-300 px-6 text-center ${
+          className={`transition-opacity duration-300 px-4 md:px-6 text-center ${
             isAnimating ? "opacity-0" : "opacity-100"
           }`}
         >
           {overlayContent === "signup" ? (
             <>
-              <h1 className="text-3xl font-bold mb-4">Welcome Back!</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-4">Welcome Back!</h1>
               <p className="mb-6 text-sm">Để tiếp tục, vui lòng đăng nhập</p>
               <button onClick={() => toggleMode(false)} className="btn-outline">
                 Sign In
@@ -123,7 +124,7 @@ export default function AuthPage() {
             </>
           ) : (
             <>
-              <h1 className="text-3xl font-bold mb-4">Hello, welcome!</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-4">Hello, welcome!</h1>
               <p className="mb-6 text-sm">Nhập thông tin cá nhân để bắt đầu</p>
               <button onClick={() => toggleMode(true)} className="btn-outline">
                 Sign Up
@@ -131,6 +132,7 @@ export default function AuthPage() {
             </>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
