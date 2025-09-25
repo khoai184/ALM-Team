@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input-style {
+        @apply bg-gray-100 border-none rounded-md px-4 py-2 my-2 w-full text-sm outline-none;
+    }
+
+    .btn-primary {
+        @apply bg-indigo-700 text-white px-6 py-2 rounded-md text-sm font-semibold hover:bg-indigo-800 transition;
+    }
+
+    .btn-outline {
+        @apply bg-transparent border border-white px-6 py-2 rounded-md text-sm font-semibold hover:bg-white hover:text-indigo-700 transition;
+    }
+}

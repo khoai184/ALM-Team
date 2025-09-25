@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input-style {
+    @apply w-full px-4 py-2 border border-indigo-400 rounded-md outline-none focus:ring-2 focus:ring-indigo-500 bg-white;
+  }
+  .btn-primary {
+    @apply bg-indigo-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-indigo-700 transition;
+  }
+  .btn-outline {
+    @apply border border-white px-6 py-2 rounded-md hover:bg-white hover:text-indigo-700 transition;
+  }
+  .btn-social {
+    @apply text-white px-4 py-2 rounded-md font-medium hover:opacity-90 transition;
+  }
+}
