@@ -8,7 +8,6 @@ export default function MainLayout() {
 		<div className="min-h-screen flex flex-col">
 			<Navbar />
 			<main className="flex-1 p-4 md:p-6 bg-gray-50">
-				<h1 className="text-lg md:text-xl font-semibold mb-4">MainLayout</h1>
 				{/* Outlet rất quan trọng để render page con */}
 				<Outlet />
 			</main>

@@ -1,0 +1,149 @@
+[1mdiff --cc src/modules/auth/pages/LoginPage.tsx[m
+[1mindex 8bb0ad2,7136392..0000000[m
+[1m--- a/src/modules/auth/pages/LoginPage.tsx[m
+[1m+++ b/src/modules/auth/pages/LoginPage.tsx[m
+[36m@@@ -2,31 -2,20 +2,31 @@@[m [mimport { useState } from "react"[m
+  import "../../../App.css";[m
+  import "../../../global.css";[m
+  import CGlogo from "../../../assets/codegymlogo.png";[m
+[31m -import BG from "../../../assets/codegym.png";[m
+[32m +import BG from "../../../assets/codegym.png"; // nền toàn trang[m
+  import UserService from "../services/keycloakService";[m
+[31m- import { api, type SignupData } from "../../../services/api"; [m
+[31m- [m
+[31m -import { loginWithUsernamePassword } from "../services/authApi"; // Thêm dòng này[m
+[32m++import { api, type SignupData } from "../../../services/api";[m
+[32m++import { loginWithUsernamePassword } from "../services/authApi";[m
+  [m
+  export default function AuthPage() {[m
+    const [isSignup, setIsSignup] = useState(false);[m
+    const [activeForm, setActiveForm] = useState<"login" | "signup">("login");[m
+    const [isAnimating, setIsAnimating] = useState(false);[m
+[31m-   const [overlayContent, setOverlayContent] = useState<"login" | "signup">([m
+[31m-     [m
+[31m-     "login"[m
+[31m-   [m
+[31m-   );[m
+[32m+   const [overlayContent, setOverlayContent] = useState<"login" | "signup">("login");[m
+[32m+   const [email, setEmail] = useState(""); // Thêm state cho email[m
+[32m+   const [password, setPassword] = useState(""); // Thêm state cho password[m
+[32m+   const [loading, setLoading] = useState(false); // Loading state[m
+[32m+   const [error, setError] = useState<string | null>(null); // Error state[m
+  [m
+[32m +  // State cho form đăng ký[m
+[32m +  const [signupData, setSignupData] = useState({[m
+[32m +    username: "",[m
+[32m +    email: "",[m
+[32m +    password: "",[m
+[32m +    agreeTerms: false[m
+[32m +  });[m
+[32m +  const [signupErrors, setSignupErrors] = useState<Record<string, string>>({});[m
+[32m +  const [isSigningUp, setIsSigningUp] = useState(false);[m
+[32m +[m
+    const toggleMode = (signup: boolean) => {[m
+      setIsAnimating(true);[m
+      setTimeout(() => setOverlayContent(signup ? "signup" : "login"), 200);[m
+[36m@@@ -36,85 -25,26 +36,102 @@@[m
+    };[m
+  [m
+    const handleSSOLogin = () => {[m
+[31m-     UserService.doLogin(); // login trực tiếp[m
+[32m+     UserService.doLogin();[m
+    };[m
+  [m
+[32m +  // Validation cho form đăng ký[m
+[32m +  const validateSignupForm = () => {[m
+[32m +    const errors: Record<string, string> = {};[m
+[32m +    [m
+[32m +    if (!signupData.username.trim()) {[m
+[32m +      errors.username = "Username is required";[m
+[32m +    } else if (signupData.username.length < 3) {[m
+[32m +      errors.username = "Username must be at least 3 characters";[m
+[32m +    }[m
+[32m +    [m
+[32m +    if (!signupData.email.trim()) {[m
+[32m +      errors.email = "Email is required";[m
+[32m +    } else if (!/\S+@\S+\.\S+/.test(signupData.email)) {[m
+[32m +      errors.email = "Email is invalid";[m
+[32m +    }[m
+[32m +    [m
+[32m +    if (!signupData.password) {[m
+[32m +      errors.password = "Password is required";[m
+[32m +    } else if (signupData.password.length < 6) {[m
+[32m +      errors.password = "Password must be at least 6 characters";[m
+[32m +    }[m
+[32m +    [m
+[32m +    if (!signupData.agreeTerms) {[m
+[32m +      errors.agreeTerms = "You must agree to the terms";[m
+[32m +    }[m
+[32m +    [m
+[32m +    setSignupErrors(errors);[m
+[32m +    return Object.keys(errors).length === 0;[m
+[32m +  };[m
+[32m +[m
+[32m +  // Handler cho input changes[m
+[32m +  const handleSignupInputChange = (field: string, value: string | boolean) => {[m
+[32m +    setSignupData(prev => ({ ...prev, [field]: value }));[m
+[32m +    // Clear error when user starts typing[m
+[32m +    if (signupErrors[field]) {[m
+[32m +      setSignupErrors(prev => ({ ...prev, [field]: "" }));[m
+[32m +    }[m
+[32m +  };[m
+[32m +[m
+[32m +  // Handler cho đăng ký[m
+[32m +  const handleSignup = async (e: React.FormEvent) => {[m
+[32m +    e.preventDefault();[m
+[32m +    [m
+[32m +    if (!validateSignupForm()) {[m
+[32m +      return;[m
+[32m +    }[m
+[32m +    [m
+[32m +    setIsSigningUp(true);[m
+[32m +    try {[m
+[32m +      const response = await api.signup(signupData as SignupData);[m
+[32m +      [m
+[32m +      if (response.success) {[m
+[32m +        // Đăng ký thành công, có thể redirect đến login hoặc dashboard[m
+[32m +        console.log("Signup successful:", response.message);[m
+[32m +        // Reset form[m
+[32m +        setSignupData({[m
+[32m +          username: "",[m
+[32m +          email: "",[m
+[32m +          password: "",[m
+[32m +          agreeTerms: false[m
+[32m +        });[m
+[32m +        // Chuyển về form login[m
+[32m +        toggleMode(false);[m
+[32m +        alert("Đăng ký thành công! Vui lòng đăng nhập.");[m
+[32m +      } else {[m
+[32m +        console.error("Signup failed:", response.message);[m
+[32m +        alert("Đăng ký thất bại: " + response.message);[m
+[32m +      }[m
+[32m +    } catch (error) {[m
+[32m +      console.error("Signup error:", error);[m
+[32m +      alert("Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.");[m
+[32m +    } finally {[m
+[32m +      setIsSigningUp(false);[m
+[32m +    }[m
+[32m +  };[m
+[32m +[m
+[32m+   // Xử lý đăng nhập thường[m
+[32m+   const handleLogin = async (e: React.FormEvent) => {[m
+[32m+     e.preventDefault();[m
+[32m+     setLoading(true);[m
+[32m+     setError(null);[m
+[32m+     try {[m
+[32m+       // Gọi API đăng nhập[m
+[32m+       const data = await loginWithUsernamePassword(email, password);[m
+[32m+       // Xử lý sau khi đăng nhập thành công (lưu token, chuyển trang, ...)[m
+[32m+       console.log("Login success:", data);[m
+[32m+       // Ví dụ: localStorage.setItem("token", data.token);[m
+[32m+     } catch (err: any) {[m
+[32m+       setError(err.message || "Login failed");[m
+[32m+     } finally {[m
+[32m+       setLoading(false);[m
+[32m+     }[m
+[32m+   };[m
+  [m
+    return ([m
+      <div[m
