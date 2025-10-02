@@ -12,7 +12,7 @@ export default function AuthPage() {
   const [activeForm, setActiveForm] = useState<"login" | "signup">("login");
   const [isAnimating, setIsAnimating] = useState(false);
   const [overlayContent, setOverlayContent] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState(""); // Thêm state cho email
+  const [usernameOrEmail, setUsernameOrEmail] = useState(""); // Username hoặc email
   const [password, setPassword] = useState(""); // Thêm state cho password
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
@@ -134,21 +134,26 @@ export default function AuthPage() {
 
     try {
       // Gọi API đăng nhập: nếu trả về 2xx coi như thành công
-      const data = await loginWithUsernamePassword(email, password);
+      const data = await loginWithUsernamePassword(usernameOrEmail, password);
 
-      // Lưu token nếu backend trả về (không bắt buộc)
-      if ((data as any)?.token) {
-        localStorage.setItem("auth_token", (data as any).token as string);
+      // Lưu token và user info từ response mới
+      if (data.data?.token) {
+        localStorage.setItem("auth_token", data.data.token);
       }
-      if ((data as any)?.user) {
-        localStorage.setItem("user_info", JSON.stringify((data as any).user));
+      if (data.data) {
+        localStorage.setItem("user_info", JSON.stringify({
+          id: data.data.id,
+          email: data.data.email,
+          username: data.data.username,
+          role: data.data.role
+        }));
       }
 
       // Redirect đến trang chủ theo yêu cầu
       window.location.href = "http://localhost:5173";
     } catch (err: any) {
       console.error("Login error:", err);
-      setError(err?.message || "Sai email hoặc mật khẩu");
+      setError(err?.message || "Sai username/email hoặc mật khẩu");
     } finally {
       setLoading(false);
     }
@@ -186,11 +191,11 @@ export default function AuthPage() {
               <img src={CGlogo} alt="CodeGym Logo" className="h-10 mb-6" />
 
               <input
-                type="email"
-                placeholder="Email address"
+                type="text"
+                placeholder="Username hoặc Email"
                 className="input-style"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                value={usernameOrEmail}
+                onChange={e => setUsernameOrEmail(e.target.value)}
                 required
               />
               <input
@@ -337,7 +342,7 @@ export default function AuthPage() {
           >
             {overlayContent === "signup" ? (
               <>
-                <div className="flex items-center mb-6 text-lg font-bold">
+                <div className="flex items-center mb-6 text-lg font-bold ">
                   <img src="/src/assets/logoTIM.png" className="h-10 mr-2" />
                 </div>
                 <h1 className="text-4xl font-bold mb-4">Hello, welcome</h1>
@@ -355,7 +360,7 @@ export default function AuthPage() {
               </>
             ) : (
               <>
-                <div className="flex items-center mb-6 text-lg font-bold">
+                <div className="flex items-center mb-6 text-lg font-bold top-[50px] left-[50px] absolute">
                   <img src="/src/assets/logoTIM.png" className="h-10 mr-2" />
                 </div>
                 <h1 className="text-4xl font-bold mb-4">Welcome Back!</h1>
@@ -366,7 +371,7 @@ export default function AuthPage() {
                 </p>
                 <button
                   onClick={() => toggleMode(true)}
-                  className="btn-outline bottom-[180px] right-[150px] absolute"
+                  className="btn-outline bottom-[180px] right absolute"
                 >
                   Create a new account?
                 </button>
