@@ -2,7 +2,7 @@ import keycloak from "./keycloak";
 
 let isInitialized = false;
 
-const initKeycloak = (onAuthenticatedCallback: Function, _logout: Function) => {
+const initKeycloak = (onAuthenticatedCallback: () => void) => {
   if (isInitialized) {
     console.log("Keycloak is already initialized.");
     return;

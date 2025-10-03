@@ -101,7 +101,7 @@ export default function AuthPage() {
       });
       toggleMode(false);
       alert("Đăng ký thành công! Vui lòng đăng nhập.");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Signup error:", error);
       
       // Parse error message
@@ -151,9 +151,9 @@ export default function AuthPage() {
 
       // Redirect đến trang chủ theo yêu cầu
       window.location.href = "http://localhost:5173";
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login error:", err);
-      setError(err?.message || "Sai username/email hoặc mật khẩu");
+      setError(err instanceof Error ? err.message : "Sai username/email hoặc mật khẩu");
     } finally {
       setLoading(false);
     }
