@@ -1,7 +1,8 @@
 // import keycloak from "../../auth/services/keycloak";
 import DashboardCard from "../components/DashboardCard";
 // import Keycloak from "keycloak-js";
-import KeycloakService from "../../auth/services/keycloakService";
+// import KeycloakService from "../../auth/services/keycloakService";
+import HomeNavbar from "../../../components/HomeNavbar";
 
 
 
@@ -26,10 +27,12 @@ export default function HomePage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div>
+      <HomeNavbar />
+      <div className="space-y-6">
       {/* User Info Card */}
       {user ? (
-        <div className="bg-white shadow-lg rounded-lg p-6 border-l-4 border-blue-500">
+        <div className="mt-5 bg-white shadow-lg rounded-lg p-6 border-l-4 border-blue-500">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Thông tin người dùng</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -88,6 +91,7 @@ export default function HomePage() {
         >
           Đăng xuất
         </button>
+      </div>
       </div>
     </div>
   );

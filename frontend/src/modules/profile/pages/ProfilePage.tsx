@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../services/api";
+import ProfileNavbar from "../../../components/ProfileNavbar";
 
 // Interface cho ProfileResponse từ backend
 interface ProfileResponse {
@@ -195,7 +196,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div>
+      <ProfileNavbar />
+      <div className="max-w-7xl mx-auto">
       {/* Cover image */}
       <div className="rounded-xl overflow-hidden h-48 md:h-56 lg:h-64 w-full mb-6">
         <img
@@ -486,9 +489,9 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl shadow p-6">
             <h4 className="text-xl font-semibold mb-4">Progress</h4>
             <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-              <div className="h-4 bg-blue-600 w-4/5"></div>
+              <div className="h-4 bg-blue-600 w-[50%]"></div>
             </div>
-            <p className="text-sm text-gray-600 mt-3">Scrum Essence: 83%</p>
+            <p className="text-sm text-gray-600 mt-3">Scrum Essence: 50%</p>
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
@@ -505,6 +508,7 @@ export default function ProfilePage() {
             </div>
           </div>
         </aside>
+      </div>
       </div>
     </div>
   );
